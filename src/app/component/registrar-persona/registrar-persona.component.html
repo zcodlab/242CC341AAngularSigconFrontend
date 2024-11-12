@@ -1,0 +1,24 @@
+<div class="card">
+  <div class="card-body">
+    <div class="table-responsive">
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">APaterno</th>
+            <th scope="col">AMaterno</th>
+            <th scope="col">Nombres</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let persona of personaArray; let i = index">
+            <td>{{ i + 1 }}</td>
+            <td>{{ persona.apellidoPaterno }}</td>
+            <td>{{ persona.apellidoMaterno }}</td>
+            <td>{{ persona.nombres }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
