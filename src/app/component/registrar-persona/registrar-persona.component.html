@@ -4,36 +4,113 @@
     <h1>{{ title }}</h1>
     <div class="card">
       <div class="card-body"></div>
-      <form>
-        <div class="mb-3">
-          <label for="exampleInputEmail1" class="form-label"
-            >Email address</label
+      <form class="form-group g-4 needs-validation" [formGroup]="personaForm">
+        <div class="row mb-2">
+          <label for="inputAPaterno" class="col-sm-2 col-form-label"
+            >Apellido Paterno:</label
           >
-          <input
-            type="email"
-            class="form-control"
-            id="exampleInputEmail1"
-            aria-describedby="emailHelp"
-          />
-          <div id="emailHelp" class="form-text">
-            We'll never share your email with anyone else.
+          <div class="col-sm-4">
+            <input
+              type="text"
+              class="form-control"
+              id="inputAPaterno"
+              placeholder="Consigne Apellido Paterno"
+              formControlName="apellidoPaterno"
+            />
           </div>
         </div>
-        <div class="mb-3">
-          <label for="exampleInputPassword1" class="form-label">Password</label>
-          <input
-            type="password"
-            class="form-control"
-            id="exampleInputPassword1"
-          />
-        </div>
-        <div class="mb-3 form-check">
-          <input type="checkbox" class="form-check-input" id="exampleCheck1" />
-          <label class="form-check-label" for="exampleCheck1"
-            >Check me out</label
+
+        <div class="row mb-2">
+          <label for="inputAMaterno" class="col-sm-2 col-form-label"
+            >Apellido Materno:</label
           >
+          <div class="col-sm-4">
+            <input
+              type="text"
+              class="form-control"
+              id="inputAMaterno"
+              placeholder="Consigne Apellido Materno"
+              formControlName="apellidoMaterno"
+            />
+          </div>
         </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
+
+        <div class="row mb-2">
+          <label for="inputNombres" class="col-sm-2 col-form-label"
+            >Nombres:</label
+          >
+          <div class="col-sm-4">
+            <input
+              type="text"
+              class="form-control"
+              id="inputNombres"
+              placeholder="Consigne Nombres"
+              formControlName="nombres"
+            />
+          </div>
+        </div>
+        <div class="row mb-2">
+          <label for="inputFNac" class="col-sm-2 col-form-label"
+            >Fecha Nacimiento:</label
+          >
+          <div class="col-sm-2">
+            <input
+              type="date"
+              class="form-control"
+              id="inputFNac"
+              placeholder="Consigne Fecha dd/mm/yyyy"
+              formControlName="fechaNacimiento"
+            />
+          </div>
+        </div>
+
+        <div class="row mb-2">
+          <label for="inputTipoDoc" class="col-sm-2 col-form-label"
+            >Tipo Documento:</label
+          >
+          <div class="col-sm-4">
+            <input
+              type="text"
+              class="form-control"
+              id="inputTipoDoc"
+              placeholder="Consigne Tipo Documento"
+              formControlName="idTipoDocumento"
+            />
+          </div>
+        </div>
+
+        <div class="row mb-2">
+          <label for="inputNDoc" class="col-sm-2 col-form-label"
+            >N° Documento:</label
+          >
+          <div class="col-sm-2">
+            <input
+              type="text"
+              class="form-control"
+              id="inputNDoc"
+              placeholder="Consigne N° Documento"
+              formControlName="ndocumento"
+            />
+          </div>
+        </div>
+
+        <div class="row mb-2">
+          <label for="inputUbigeo" class="col-sm-2 col-form-label"
+            >Ubigeo:</label
+          >
+          <div class="col-sm-4">
+            <input
+              type="text"
+              class="form-control"
+              id="inputUbigeo"
+              placeholder="Consigne Ubigeo"
+              formControlName="idUbigeo"
+            />
+          </div>
+        </div>
+        <div class="row m-2 col-sm-1">
+          <button type="submit" class="btn btn-primary">Registrar</button>
+        </div>
       </form>
     </div>
   </div>
