@@ -26,4 +26,12 @@ export class RegistrarPersonaComponent {
       //console.log(this.personaArray[0]);
     });
   }
+
+  editarPersona(personaResponse: IPersonaResponse): void {
+    console.log('editando persona');
+  }
+
+  eliminarPersona(personaResponse: IPersonaResponse): void {
+    console.log('eliminando persona');
+  }
 }
