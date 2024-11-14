@@ -1,24 +1,79 @@
-<div class="card">
-  <div class="card-body">
-    <div class="table-responsive">
-      <table class="table table-hover">
-        <thead>
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">APaterno</th>
-            <th scope="col">AMaterno</th>
-            <th scope="col">Nombres</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let persona of personaArray; let i = index">
-            <td>{{ i + 1 }}</td>
-            <td>{{ persona.apellidoPaterno }}</td>
-            <td>{{ persona.apellidoMaterno }}</td>
-            <td>{{ persona.nombres }}</td>
-          </tr>
-        </tbody>
-      </table>
+<div class="container">
+  <div class="row">
+    <!--Persona-Cabecera-->
+    <h1>{{ title }}</h1>
+    <div class="card">
+      <div class="card-body"></div>
+      <form>
+        <div class="mb-3">
+          <label for="exampleInputEmail1" class="form-label"
+            >Email address</label
+          >
+          <input
+            type="email"
+            class="form-control"
+            id="exampleInputEmail1"
+            aria-describedby="emailHelp"
+          />
+          <div id="emailHelp" class="form-text">
+            We'll never share your email with anyone else.
+          </div>
+        </div>
+        <div class="mb-3">
+          <label for="exampleInputPassword1" class="form-label">Password</label>
+          <input
+            type="password"
+            class="form-control"
+            id="exampleInputPassword1"
+          />
+        </div>
+        <div class="mb-3 form-check">
+          <input type="checkbox" class="form-check-input" id="exampleCheck1" />
+          <label class="form-check-label" for="exampleCheck1"
+            >Check me out</label
+          >
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
+    </div>
+  </div>
+  <div class="row">
+    <!--Persona-Detalle-->
+    <div class="card">
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">APaterno</th>
+                <th scope="col">AMaterno</th>
+                <th scope="col">Nombres</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                *ngFor="
+                  let persona of personaArray
+                    | paginate : { itemsPerPage: 10, currentPage: page };
+                  let i = index
+                "
+              >
+                <td>{{ i + 1 }}</td>
+                <td>{{ persona.apellidoPaterno }}</td>
+                <td>{{ persona.apellidoMaterno }}</td>
+                <td>{{ persona.nombres }}</td>
+              </tr>
+            </tbody>
+          </table>
+          <pagination-controls
+            (pageChange)="page = $event"
+            previousLabel="Anterior"
+            nextLabel="Siguiente"
+          >
+          </pagination-controls>
+        </div>
+      </div>
     </div>
   </div>
 </div>
