@@ -49,6 +49,11 @@
                 <th scope="col">APaterno</th>
                 <th scope="col">AMaterno</th>
                 <th scope="col">Nombres</th>
+                <th scope="col">FNac</th>
+                <th scope="col">TipoDoc</th>
+                <th scope="col">NDoc</th>
+                <th scope="col">Direccion</th>
+                <th scope="col">Ubigeo</th>
               </tr>
             </thead>
             <tbody>
@@ -63,6 +68,23 @@
                 <td>{{ persona.apellidoPaterno }}</td>
                 <td>{{ persona.apellidoMaterno }}</td>
                 <td>{{ persona.nombres }}</td>
+                <td>{{ persona.fechaNacimiento }}</td>
+                <td *ngIf="persona.tipoDocumento">
+                  {{ persona.tipoDocumento.descripcion }}
+                </td>
+                <td *ngIf="!persona.tipoDocumento">Ninguno</td>
+                <td>{{ persona.ndocumento }}</td>
+                <td>{{ persona.direccion }}</td>
+                <td *ngIf="persona.ubigeo">
+                  {{
+                    persona.ubigeo.departamento +
+                      "|" +
+                      persona.ubigeo.provincia +
+                      "|" +
+                      persona.ubigeo.distrito
+                  }}
+                </td>
+                <td *ngIf="!persona.ubigeo">Ninguno</td>
               </tr>
             </tbody>
           </table>
