@@ -68,14 +68,20 @@
           <label for="inputTipoDoc" class="col-sm-2 col-form-label"
             >Tipo Documento:</label
           >
-          <div class="col-sm-4">
-            <input
-              type="text"
-              class="form-control"
-              id="inputTipoDoc"
-              placeholder="Consigne Tipo Documento"
+          <div class="col-sm-2">
+            <select
+              class="form-control form-select"
+              id="inputIdTipoDocumento"
               formControlName="idTipoDocumento"
-            />
+              (change)="setTipoDocumento($event)"
+            >
+              <option
+                *ngFor="let tipodoc of tipoDocumentoArray"
+                value="{{ tipodoc.idTipoDocumento }}"
+              >
+                {{ tipodoc.descripcion }}
+              </option>
+            </select>
           </div>
         </div>
 
@@ -114,13 +120,25 @@
             >Ubigeo:</label
           >
           <div class="col-sm-4">
-            <input
-              type="text"
-              class="form-control"
+            <select
+              class="form-control form-select"
               id="inputUbigeo"
-              placeholder="Consigne Ubigeo"
               formControlName="idUbigeo"
-            />
+              (change)="setUbigeo($event)"
+            >
+              <option
+                *ngFor="let ubigeo of ubigeoArray"
+                value="{{ ubigeo.idUbigeo }}"
+              >
+                {{
+                  ubigeo.departamento +
+                    "|" +
+                    ubigeo.provincia +
+                    "|" +
+                    ubigeo.distrito
+                }}
+              </option>
+            </select>
           </div>
         </div>
         <div class="row m-2 col-sm-1">

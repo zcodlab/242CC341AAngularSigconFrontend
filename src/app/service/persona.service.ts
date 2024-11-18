@@ -24,4 +24,7 @@ export class PersonaService {
       body: persona,
     });
   }
+  actualizarPersona(persona: IPersonaRequest): Observable<IPersonaResponse> {
+    return this.http.put<IPersonaResponse>(`${BASE_URL}/persona`, persona);
+  }
 }

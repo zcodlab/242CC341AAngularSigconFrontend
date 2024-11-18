@@ -12,6 +12,10 @@ import {
 import { IPersonaRequest } from '../../model/persona-request';
 import Swal from 'sweetalert2';
 import { error } from 'console';
+import { TipoDocumentoService } from '../../service/tipo-documento.service';
+import { ITipoDocumento } from '../../model/tipo-documento';
+import { IUbigeo } from '../../model/ubigeo';
+import { UbigeoService } from '../../service/ubigeo.service';
 
 @Component({
   selector: 'app-registrar-persona',
@@ -23,11 +27,18 @@ import { error } from 'console';
 export class RegistrarPersonaComponent {
   title = 'Registrar Persona';
   personaArray: IPersonaResponse[] = [];
+  tipoDocumentoArray: ITipoDocumento[] = [];
+  ubigeoArray: IUbigeo[] = [];
   page: number = 1;
   personaForm: FormGroup;
   personaRequest: IPersonaRequest = {} as IPersonaRequest;
+  isEdited: boolean = false;
 
-  constructor(private personaService: PersonaService) {
+  constructor(
+    private personaService: PersonaService,
+    private tipoDocumentoService: TipoDocumentoService,
+    private ubigeoService: UbigeoService
+  ) {
     this.personaForm = new FormGroup({
       idPersona: new FormControl(''),
       apellidoPaterno: new FormControl('', [
@@ -51,7 +62,10 @@ export class RegistrarPersonaComponent {
   }
 
   ngOnInit(): void {
+    this.isEdited = false;
     this.personaForm.reset();
+    this.getTipoDocumento();
+    this.getUbigeo();
     this.personaForm.controls['idTipoDocumento'].setValue(1);
     this.personaForm.controls['idUbigeo'].setValue(150101);
     this.getPersonas();
@@ -63,8 +77,8 @@ export class RegistrarPersonaComponent {
       //console.log(this.personaArray[0]);
     });
   }
-  setPersona(): void {
-    this.personaRequest.idPersona = this.personaForm.get('id_persona')?.value;
+  setPersonaRequest(): void {
+    this.personaRequest.idPersona = this.personaForm.get('idPersona')?.value;
     this.personaRequest.apellidoPaterno =
       this.personaForm.get('apellidoPaterno')?.value;
     this.personaRequest.apellidoMaterno =
@@ -78,10 +92,13 @@ export class RegistrarPersonaComponent {
     this.personaRequest.direccion = this.personaForm.get('direccion')?.value;
     this.personaRequest.idUbigeo = this.personaForm.get('idUbigeo')?.value;
   }
-
   registrarPersona(): void {
-    console.log('registrando persona');
-    this.setPersona();
+    this.setPersonaRequest();
+    if (this.isEdited) this.actualizarPersona();
+    else this.insertarPersona();
+  }
+
+  insertarPersona(): void {
     this.personaService.registrarPersona(this.personaRequest).subscribe(
       (result: any) => {
         console.log('registrarPersona', result);
@@ -103,22 +120,16 @@ export class RegistrarPersonaComponent {
       }
     );
   }
-  editarPersona(personaResponse: IPersonaResponse): void {
-    console.log('editando persona');
-  }
-
-  eliminarPersona(personaResponse: IPersonaResponse): void {
-    console.log('eliminando persona');
-    this.personaRequest.idPersona = personaResponse.idPersona;
-    this.personaService.eliminarPersona(this.personaRequest).subscribe(
+  actualizarPersona(): void {
+    console.log('personaRequest', this.personaRequest);
+    this.personaService.actualizarPersona(this.personaRequest).subscribe(
       (result: any) => {
-        console.log('eliminarPersona', result);
         this.ngOnInit();
         Swal.close();
         Swal.fire({
           icon: 'success',
-          title: 'eliminarPersona....',
-          text: '!Se elimino exitosamente la persona!',
+          title: 'actualizarPersona....',
+          text: '!Se actualizo exitosamente la persona!',
         });
       },
       (err: any) => {
@@ -126,9 +137,106 @@ export class RegistrarPersonaComponent {
         Swal.fire({
           icon: 'error',
           title: 'Advertencia....',
-          text: '!Ah ocurrido un error al eliminar Persona',
+          text: '!Ah ocurrido un error al actualizar la Persona',
         });
       }
     );
+  }
+  editarPersona(personaResponse: IPersonaResponse): void {
+    Swal.fire({
+      title: 'Esta seguro de editar los datos de la persona seleccionada?',
+      showCancelButton: true,
+      cancelButtonText: 'No',
+      confirmButtonText: 'Si',
+      focusCancel: true,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.personaForm.patchValue({
+          idPersona: personaResponse.idPersona,
+          apellidoPaterno: personaResponse.apellidoPaterno,
+          apellidoMaterno: personaResponse.apellidoMaterno,
+          nombres: personaResponse.nombres,
+          fechaNacimiento: personaResponse.fechaNacimiento,
+          idTipoDocumento: personaResponse?.tipoDocumento?.idTipoDocumento,
+          ndocumento: personaResponse.ndocumento,
+          direccion: personaResponse.direccion,
+          idUbigeo: personaResponse?.ubigeo?.idUbigeo,
+        });
+        this.isEdited = true;
+      } //end if
+    }); //end swal.fire
+  }
+
+  eliminarPersona(personaResponse: IPersonaResponse): void {
+    Swal.fire({
+      title: 'Esta seguro de eliminar la persona seleccionada?',
+      showCancelButton: true,
+      cancelButtonText: 'No',
+      confirmButtonText: 'Si',
+      focusCancel: true,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.personaRequest.idPersona = personaResponse.idPersona;
+        this.personaService.eliminarPersona(this.personaRequest).subscribe(
+          (result: any) => {
+            console.log('eliminarPersona', result);
+            this.ngOnInit();
+            Swal.close();
+            Swal.fire({
+              icon: 'success',
+              title: 'eliminarPersona....',
+              text: '!Se elimino exitosamente la persona!',
+            });
+          },
+          (err: any) => {
+            Swal.close();
+            Swal.fire({
+              icon: 'error',
+              title: 'Advertencia....',
+              text: '!Ah ocurrido un error al eliminar Persona',
+            });
+          }
+        );
+      }
+    });
+  }
+  getTipoDocumento(): void {
+    this.tipoDocumentoService.getTipoDocumento().subscribe(
+      (result: any) => {
+        this.tipoDocumentoArray = result;
+      },
+      (err: any) => {
+        Swal.close();
+        Swal.fire({
+          icon: 'error',
+          title: 'Advertencia....',
+          text: '!Ah ocurrido un error al recuperar TipoDocumento',
+        });
+      }
+    );
+  }
+  setTipoDocumento(event: Event): void {
+    const inputChangeValue = (event.target as HTMLInputElement).value;
+    this.personaForm.controls['idTipoDocumento'].setValue(inputChangeValue);
+  }
+
+  getUbigeo(): void {
+    this.ubigeoService.getUbigeo().subscribe(
+      (result: any) => {
+        this.ubigeoArray = result;
+      },
+      (err: any) => {
+        Swal.close();
+        Swal.fire({
+          icon: 'error',
+          title: 'Advertencia....',
+          text: '!Ah ocurrido un error al recuperar Ubigeos',
+        });
+      }
+    );
+  }
+  setUbigeo(event: Event): void {
+    const inputChangeValue = (event.target as HTMLInputElement).value;
+    this.personaForm.controls['idUbigeo'].setValue(inputChangeValue);
   }
 }
